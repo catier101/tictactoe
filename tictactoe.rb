@@ -49,6 +49,8 @@ class Board
       @botmid = "X"
     elsif @move1 == "C3"
       @botleft = "X"
+    else
+      @move1 = "ERROR"
     end
   end
   def update2
@@ -68,8 +70,21 @@ class Board
       @botright = "O"
     elsif @move2 == "C2"
       @botmid = "O"
-    elsif @move3 == "C3"
+    elsif @move2 == "C3"
       @botleft = "O"
+    else
+      @move2 = "error"
+    end
+  end
+  def checkinput
+    if @move1 == "error" || @move2 == "error"
+      return "Please enter valid input!"
+    end
+  end
+  def checkboard
+    if @topright == "X" && @topmid == "X" && @topleft == "X" || @topright == "O" && @topmid == "O" && @topleft == "O"
+      puts "GAME OVER"
+      exit
     end
   end
 end
@@ -85,22 +100,20 @@ def game
     if count.even? == true
       puts "Player One: make a move (choose from display above)"
       new.getplayer1
+      new.checkboard
+      new.checkinput
       new.update1
+      count = count + 1
     else
       puts "Player Two: make a move (choose from display above)"
+      new.checkboard
       new.getplayer2
+      new.checkinput
       new.update2
+      count = count + 1
     end
     new.putboard
-    count = count + 1
-    puts count
   end
 end
 
 game
-# puts "Player One: make a move"
-# first = PlayerOne.new
-# first.update
-# second = PlayerTwo.new
-# puts "Player Two: make a move"
-# second = PlayerTwo.new
