@@ -1,6 +1,8 @@
+#this code is long and messy and redundant and also I mixed up left and right thROUGH THE ENTIRE THING LOL
+
 class Board
   attr_reader :count
-  attr_accessor :topright, :topmid, :topleft, :midright, :midmid, :midleft, :botright, :botmid, :botleft, :move1err, :move2
+  attr_accessor :topright, :topmid, :topleft, :midright, :midmid, :midleft, :botright, :botmid, :botleft, :move1err, :move2err
   def initialize
     @topright = "."
     @topmid = "."
@@ -13,6 +15,7 @@ class Board
     @botleft = "."
     @count = 0
     @move1err = false
+    @move2err = false
   end
   def getplayer1
     @move1 = gets.chomp
@@ -53,7 +56,12 @@ class Board
     elsif @move1 == "C3"
       @botleft = "X"
     else
-      puts "Please enter a valid input!"
+      @move1err = true
+      puts "Please enter valid input!"
+      getplayer1
+      update1
+      putboard
+      return
     end
   end
   def update2
@@ -76,13 +84,18 @@ class Board
     elsif @move2 == "C3"
       @botleft = "O"
     else
-      @move1err = true
+      @move2err = true
+      puts "Please enter valid input!"
+      getplayer2
+      update2
+      putboard
+      return
     end
   end
   def checkinput
-    if @move1err == true || @move2 == "error"
+    if @move1err == true || @move2err == true
       puts "Please enter valid input!"
-      reset new.getplayer1
+      return getplayer1
     end
   end
   def checkboard
@@ -97,6 +110,7 @@ class Board
     master = [".", ".", "."]
     if tophorz.uniq.length == 1 && tophorz != master || midhorz.uniq.length == 1 && midhorz != master || bothorz.uniq.length == 1 && bothorz != master || rightvert.uniq.length == 1 && rightvert != master || midvert.uniq.length == 1 && midvert != master || leftvert.uniq.length == 1 && leftvert != master || rldiag.uniq.length == 1 && rldiag != master || lrdiag.uniq.length == 1 && lrdiag != master
       puts "GAME OVER"
+      putboard
       exit
     end
   end
@@ -114,15 +128,14 @@ def game
       puts "Player One: make a move (choose from display above)"
       new.getplayer1
       new.update1
-      new.checkinput
       count = count + 1
       new.putboard
     else
       puts "Player Two: make a move (choose from display above)"
       new.getplayer2
-      new.checkinput
       new.update2
       count = count + 1
+      new.putboard
     end
     new.checkboard
   end
