@@ -1,17 +1,18 @@
 class Board
   attr_reader :count
-  attr_accessor :topright, :topmid, :topleft, :midright, :midmid, :midleft, :botright, :botmid, :botleft, :move1, :move2
+  attr_accessor :topright, :topmid, :topleft, :midright, :midmid, :midleft, :botright, :botmid, :botleft, :move1err, :move2
   def initialize
-    @topright = ". "
-    @topmid = ". "
-    @topleft = ". "
-    @midright = ". "
-    @midmid = ". "
-    @midleft = ". "
-    @botright = ". "
-    @botmid = ". "
-    @botleft = ". "
+    @topright = "."
+    @topmid = "."
+    @topleft = "."
+    @midright = "."
+    @midmid = "."
+    @midleft = "."
+    @botright = "."
+    @botmid = "."
+    @botleft = "."
     @count = 0
+    @move1err = false
   end
   def getplayer1
     @move1 = gets.chomp
@@ -52,11 +53,11 @@ class Board
     elsif @move1 == "C3"
       @botleft = "X"
     else
-      @move1 = "ERROR"
+      puts "Please enter a valid input!"
     end
   end
   def update2
-    if @move2.upcase == "A1"
+    if @move2 == "A1"
       @topright = "O"
       elsif @move2 == "A2"
       @topmid = "O"
@@ -75,23 +76,26 @@ class Board
     elsif @move2 == "C3"
       @botleft = "O"
     else
-      @move2 = "error"
+      @move1err = true
     end
   end
   def checkinput
-    if @move1 == "error" || @move2 == "error"
-      return "Please enter valid input!"
+    if @move1err == true || @move2 == "error"
+      puts "Please enter valid input!"
+      reset new.getplayer1
     end
   end
   def checkboard
-    #if @topright == "X" && @topmid == "X" && @topleft == "X" || @topright == "O" && @topmid == "O" && @topleft == "O" || @midright == "X" && @midmid == "X" && @midleft == "X" || @botright == "X" && @botmid == "X" && @botleft == "X" || @midright == "O" && @midmid == "O" && @midleft == "O" || @botright == "O" && @botmid == "O" && @botleft == "O"
     tophorz = [@topright, @topmid, @topleft]
     midhorz = [@midright, @midmid, @midleft]
-    master = [". ", ". ", ". "]
-    if tophorz.uniq.length == 1 && tophorz != master
-      puts "GAME OVER"
-      exit
-    elsif midhorz.uniq.length == 1 && midhorz != master #|| [@botright, @botmid, @botleft].uniq.length == 1 || [@topright, @midright, @botright].uniq.length == 1 || [@topmid, @midmid, @botmid].uniq.length == 1 || [@topleft, @midleft, @botleft].uniq.length == 1 || [@topright, @midmid, @botleft].uniq.length == 1 || [@topleft, @midmid, @botright].uniq.length == 1 && @count != 0
+    bothorz = [@botright, @botmid, @botleft]
+    rightvert = [@topright, @midright, @botright]
+    midvert = [@topmid, @midmid, @botmid]
+    leftvert = [@topleft, @midleft, @botleft]
+    rldiag = [@topright, @midmid, @botleft]
+    lrdiag = [@topleft, @midmid, @botright]
+    master = [".", ".", "."]
+    if tophorz.uniq.length == 1 && tophorz != master || midhorz.uniq.length == 1 && midhorz != master || bothorz.uniq.length == 1 && bothorz != master || rightvert.uniq.length == 1 && rightvert != master || midvert.uniq.length == 1 && midvert != master || leftvert.uniq.length == 1 && leftvert != master || rldiag.uniq.length == 1 && rldiag != master || lrdiag.uniq.length == 1 && lrdiag != master
       puts "GAME OVER"
       exit
     end
@@ -109,9 +113,10 @@ def game
     if count.even? == true
       puts "Player One: make a move (choose from display above)"
       new.getplayer1
-      new.checkinput
       new.update1
+      new.checkinput
       count = count + 1
+      new.putboard
     else
       puts "Player Two: make a move (choose from display above)"
       new.getplayer2
@@ -119,7 +124,6 @@ def game
       new.update2
       count = count + 1
     end
-    new.putboard
     new.checkboard
   end
 end
