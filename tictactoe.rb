@@ -84,11 +84,14 @@ class Board
     end
   end
   def checkboard
-    if @topright == "X" && @topmid == "X" && @topleft == "X" || @topright == "O" && @topmid == "O" && @topleft == "O" || @midright == "X" && @midmid == "X" && @midleft == "X" || @botright == "X" && @botmid == "X" && @botleft == "X" || @midright == "O" && @midmid == "O" && @midleft == "O" || @botright == "O" && @botmid == "O" && @botleft == "O"
-#     if [@topright, @topmid, @topleft].uniq.length == 1 
-#       puts "GAME OVER"
-#       exit
-#     elsif [@midright, @midmid, @midleft].uniq.length == 1 #|| [@botright, @botmid, @botleft].uniq.length == 1 || [@topright, @midright, @botright].uniq.length == 1 || [@topmid, @midmid, @botmid].uniq.length == 1 || [@topleft, @midleft, @botleft].uniq.length == 1 || [@topright, @midmid, @botleft].uniq.length == 1 || [@topleft, @midmid, @botright].uniq.length == 1 && @count != 0
+    #if @topright == "X" && @topmid == "X" && @topleft == "X" || @topright == "O" && @topmid == "O" && @topleft == "O" || @midright == "X" && @midmid == "X" && @midleft == "X" || @botright == "X" && @botmid == "X" && @botleft == "X" || @midright == "O" && @midmid == "O" && @midleft == "O" || @botright == "O" && @botmid == "O" && @botleft == "O"
+    tophorz = [@topright, @topmid, @topleft]
+    midhorz = [@midright, @midmid, @midleft]
+    master = [". ", ". ", ". "]
+    if tophorz.uniq.length == 1 && tophorz != master
+      puts "GAME OVER"
+      exit
+    elsif midhorz.uniq.length == 1 && midhorz != master #|| [@botright, @botmid, @botleft].uniq.length == 1 || [@topright, @midright, @botright].uniq.length == 1 || [@topmid, @midmid, @botmid].uniq.length == 1 || [@topleft, @midleft, @botleft].uniq.length == 1 || [@topright, @midmid, @botleft].uniq.length == 1 || [@topleft, @midmid, @botright].uniq.length == 1 && @count != 0
       puts "GAME OVER"
       exit
     end
@@ -109,16 +112,15 @@ def game
       new.checkinput
       new.update1
       count = count + 1
-      new.checkboard
     else
       puts "Player Two: make a move (choose from display above)"
       new.getplayer2
       new.checkinput
       new.update2
       count = count + 1
-      new.checkboard
     end
     new.putboard
+    new.checkboard
   end
 end
 
